@@ -1,1 +1,0 @@
-# maktab_44_python_project_group_3
