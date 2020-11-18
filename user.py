@@ -76,7 +76,7 @@ class User:
                 self.text = "                                                        "
                 break
         else:
-            self.text = "*** Password is Wrong ***"
+            self.text = "Password is Wrong!"
         return self.login_status
 
         # while data['data']username_input \

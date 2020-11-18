@@ -5,14 +5,12 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 
 
-
 def main():
     def open_menu_tabs(login_menu, user):
         login_menu.withdraw()
         root = Tk()
         root.title("Welcome {}!".format(user.username))
         root.geometry("400x300+10+10")
-
 
         tab_control = ttk.Notebook(root)
 
@@ -236,7 +234,7 @@ def main():
             messagebox.showerror("Error", "Username is Wrong!")
         else:
             user.login(username, password)
-            if user.text == "*** Password is Wrong ***":
+            if user.text == "Password is Wrong!":
                 messagebox.showerror("Error", user.text)
         if user.login_status:
             open_menu_tabs(menu_login, user)
@@ -249,8 +247,6 @@ def main():
     photo = PhotoImage(file="Messenger-logo.png")
     app.iconphoto(False, photo)
 
-
-
     tab_control_login = ttk.Notebook(app)
 
     register_tab = ttk.Frame(tab_control_login)
@@ -259,14 +255,14 @@ def main():
     tab_control_login.add(register_tab, text='Register')
     tab_control_login.add(login_tab, text='Login')
 
-#     canvas_register = Canvas(register_tab, width=400, height=300)
-#     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-#     canvas_register.create_image(0, 0, anchor=NW, image=image_app)
+    #     canvas_register = Canvas(register_tab, width=400, height=300)
+    #     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
+    #     canvas_register.create_image(0, 0, anchor=NW, image=image_app)
     # canvas_register.pack(expand=1, fill="both")
 
-#     canvas_login = Canvas(login_tab, width=400, height=300)
-#     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-#     canvas_login.create_image(0, 0, anchor=NW, image=image_app)
+    #     canvas_login = Canvas(login_tab, width=400, height=300)
+    #     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
+    #     canvas_login.create_image(0, 0, anchor=NW, image=image_app)
     # canvas_login.pack(expand=1, fill="both")
 
     tab_control_login.pack(expand=1, fill="both")
