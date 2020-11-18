@@ -79,7 +79,7 @@ def main():
             except ValueError:
                 messagebox.showerror("Error", "Please Enter a Number!")
 
-        Label(inbox_tab, text="Number: ").grid(row=1, column=0)
+        Label(inbox_tab, text="Number: ").grid(row=1)
         read_entry = ttk.Entry(inbox_tab)
         read_entry.grid(row=1, column=1)
         ttk.Button(inbox_tab, text="Read", command=lambda: read(user)).grid(row=2, column=0)
@@ -214,39 +214,45 @@ def main():
         sign_out_button.grid(row=3, column=2)
         root.mainloop()
 
-    # def update_login_tabs:
-
-    def save_user():
+    # Define function register button
+    # input : username, password from their labels
+    # output: register user if user not found else show a user with the username
+    def register():
         username = username_register_entry.get()
         password = password_register_entry.get()
-        User.CREATE = True
+        User.CREATE = True      # let to create user
         user = User(username, password)
-        messagebox.showerror("Error", user.text)
+        messagebox.showerror("Error", user.text)       # show there is a user with the username
         return user
 
-    #
+    # Define function login button
+    # input : messenger menu, username, password from their labels
+    # output: login user if user found else show error by message box, change login status of the user
     def login_user(menu_login):
         global login
         username = username_login_entry.get()
         password = password_login_entry.get()
-        user = User(username, password)
+        user = User(username, password)     # check user existence
         if not user.found:
             messagebox.showerror("Error", "Username is Wrong!")
-        else:
-            user.login(username, password)
-            if user.text == "Password is Wrong!":
+        else:       # if user is found
+            user.login(username, password)  # try login
+            if user.text == "Password is Wrong!":   # check password
                 messagebox.showerror("Error", user.text)
-        if user.login_status:
-            open_menu_tabs(menu_login, user)
+        if user.login_status:       # check whether login is successful or not
+            open_menu_tabs(menu_login, user)    # go to account of user
         login = user.login_status
 
+    # create messenger menu and set its features
     app = Tk()
     app.title("Messenger")
     app.geometry("400x300+10+10")
 
+    # set an icon for messenger menu
     photo = PhotoImage(file="Messenger-logo.png")
     app.iconphoto(False, photo)
 
+    # create register and login tabs
     tab_control_login = ttk.Notebook(app)
 
     register_tab = ttk.Frame(tab_control_login)
@@ -267,27 +273,35 @@ def main():
 
     tab_control_login.pack(expand=1, fill="both")
 
+    # Design register tab
+    # put username label and entry
     ttk.Label(register_tab, text='username').grid(row=0)
     username_register_entry = ttk.Entry(register_tab)
     username_register_entry.grid(row=0, column=1)
 
+    # put password label and entry
     ttk.Label(register_tab, text='password').grid(row=1)
     password_register_entry = ttk.Entry(register_tab, show="*")
     password_register_entry.grid(row=1, column=1)
 
-    register_button = ttk.Button(register_tab, text='Register', command=save_user)
+    # put register button
+    register_button = ttk.Button(register_tab, text='Register', command=register)
     register_button.grid(row=2, column=1)
 
     ttk.Label(register_tab, text="").grid(row=6, column=1)
 
+    # Design login tab
+    # put username label and entry
     ttk.Label(login_tab, text='username').grid(row=0)
     username_login_entry = ttk.Entry(login_tab)
     username_login_entry.grid(row=0, column=1)
 
+    # put password label and entry
     ttk.Label(login_tab, text='password').grid(row=1)
     password_login_entry = ttk.Entry(login_tab, show="*")
     password_login_entry.grid(row=1, column=1)
 
+    # put login button
     login_button = Button(login_tab, text='Login', command=lambda: login_user(app))
     login_button.grid(row=2, column=1)
     ttk.Label(login_tab, text="").grid(row=6, column=1)
@@ -305,6 +319,7 @@ def main():
     #     else:
     #         break
 
+    # show messenger menu
     app.mainloop()
 
 
