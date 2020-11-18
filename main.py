@@ -79,14 +79,14 @@ def main():
                 num_message = int(entry_box.get()) - 1
                 # user delete message from the determined box
                 delete_text = user.delete_message(num_message, box)
-                if delete_text == "Successfully Deleted":   # check whether deleting is successful or not 
-                    messagebox.showinfo("Delete", delete_text)
+                if delete_text == "Successfully Deleted":   # check whether deleting is successful or not
+                    messagebox.showinfo("Delete", delete_text)      # show success
                     update_tabs()
                 else:
-                    messagebox.showerror("Error", delete_text)
+                    messagebox.showerror("Error", delete_text)      # show error
 
-            except ValueError:
-                messagebox.showerror("Error", "Please Enter a Number!")
+            except ValueError:              # if message number is not entered correctly
+                messagebox.showerror("Error", "Please Enter a Number!")     # ask to enter it as a number
 
         def read(user):
             try:
