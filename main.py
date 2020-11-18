@@ -88,25 +88,32 @@ def main():
             except ValueError:              # if message number is not entered correctly
                 messagebox.showerror("Error", "Please Enter a Number!")     # ask to enter it as a number
 
-        def read(user):
+        # define function to read inbox messages
+        def read():
             try:
+                # get number of message from the number entry of inbox
                 num_message = int(read_entry.get()) - 1
+                # user tries to read message
                 message_content = user.read_message(num_message)
-                if message_content == "Message not Found":
-                    messagebox.showerror("Error", message_content)
+                if message_content == "Message not Found":      # check whether the message exists or not
+                    messagebox.showerror("Error", message_content)  # show error if message not found
                 else:
+                    # create read window
                     read_window = Tk()
                     read_window.geometry("300x300+10+10")
                     read_window.title("Title: {}".format(message_content[1].title))
+                    # show message
                     Label(read_window, text=message_content[0]).grid(row=0, column=1)
                     read_window.mainloop()
+            # if message number is not entered correctly
             except ValueError:
+                # show error if message not found
                 messagebox.showerror("Error", "Please Enter a Number!")
 
         Label(inbox_tab, text="Number: ").grid(row=1)
         read_entry = ttk.Entry(inbox_tab)
         read_entry.grid(row=1, column=1)
-        ttk.Button(inbox_tab, text="Read", command=lambda: read(user)).grid(row=2, column=0)
+        ttk.Button(inbox_tab, text="Read", command=read).grid(row=2, column=0)
         ttk.Button(inbox_tab, text="Delete", command=lambda: delete('Inbox', read_entry)).grid(row=2, column=1)
 
         def update(user_update):
