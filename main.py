@@ -237,15 +237,18 @@ def main():
                                                                       title_compose_entry,
                                                                       body_compose_entry)).grid(row=6, column=1)
 
-        def sign_out(user):
-            sign_out_text = user.sign_out()
-            messagebox.showwarning("Sign out", sign_out_text)
-            root.destroy()
-            messenger_menu.deiconify()
+        # define function for sign button
+        def sign_out():
+            sign_out_text = user.sign_out()     # sign out user
+            messagebox.showwarning("Sign out", sign_out_text)       # show sign out
+            root.destroy()      # destroy account menu
+            messenger_menu.deiconify()      # show messenger menu
 
+        # create sign out button
         sign_out_button = Button(sign_out_tab, text="Sign Out", bg='pink', font="Courier 10 bold",
-                                 command=lambda: sign_out(user))
+                                 command=lambda: sign_out())
         sign_out_button.grid(row=3, column=2)
+        # show account menu
         root.mainloop()
 
     # Define function register button
