@@ -17,52 +17,71 @@ def main():
         root.title("Welcome {}!".format(user.username))
         root.geometry("400x300+10+10")
 
+        # create tab control for 5 tabs: inbox, draft, send, compose, sign out
         tab_control = ttk.Notebook(root)
 
+        # get inbox, draft and send box user
         inbox_text, draft_text, send_text = user.get_user_info()
 
+        # create inbox tab
         inbox_tab = ttk.Frame(tab_control)
         tab_control.add(inbox_tab, text='Inbox')
 
-        global inbox_label
+        # set inbox label
+        global inbox_label  # define tabs label as global to access them in update tabs function
         inbox_label = ttk.Label(inbox_tab, text=inbox_text)
         inbox_label.grid(column=0, row=0, padx=30, pady=30)
 
+        # create draft tab
         draft_tab = ttk.Frame(tab_control)
         tab_control.add(draft_tab, text='Draft')
 
+        # set draft label
         global draft_label
         draft_label = ttk.Label(draft_tab, text=draft_text)
         draft_label.grid(column=0, row=0, padx=30, pady=30)
 
+        # create send tab
         send_tab = ttk.Frame(tab_control)
         tab_control.add(send_tab, text='Send')
 
+        # set send label
         global send_label
         send_label = ttk.Label(send_tab, text=send_text)
         send_label.grid(column=0, row=0, padx=30, pady=30)
 
+        # create compose tab
         compose_tab = ttk.Frame(tab_control)
         tab_control.add(compose_tab, text='Compose')
 
+        # create sign out tab
         sign_out_tab = ttk.Frame(tab_control)
         tab_control.add(sign_out_tab, text='Sign Out')
 
         tab_control.pack(expand=1, fill="both")
 
-        def update_tabs(user):
+        # define update tabs function
+        # update the contents of tabs after any changes
+        def update_tabs():
+            # get user information
             update_inbox_text, update_draft_text, update_send_text = user.get_user_info()
+            # update text of tab labels by config method
             inbox_label.config(text=update_inbox_text)
             draft_label.config(text=update_draft_text)
             send_label.config(text=update_send_text)
 
-        def delete(user, box, entry_box):
+        # define delete function
+        # input : box name, the content of number entry to get number of message
+        # output: delete a message from any box according to its number
+        def delete(box, entry_box):
             try:
+                # get number of message from the number entry of determined box
                 num_message = int(entry_box.get()) - 1
+                # user delete message from the determined box
                 delete_text = user.delete_message(num_message, box)
-                if delete_text == "Successfully Deleted":
+                if delete_text == "Successfully Deleted":   # check whether deleting is successful or not 
                     messagebox.showinfo("Delete", delete_text)
-                    update_tabs(user)
+                    update_tabs()
                 else:
                     messagebox.showerror("Error", delete_text)
 
@@ -88,7 +107,7 @@ def main():
         read_entry = ttk.Entry(inbox_tab)
         read_entry.grid(row=1, column=1)
         ttk.Button(inbox_tab, text="Read", command=lambda: read(user)).grid(row=2, column=0)
-        ttk.Button(inbox_tab, text="Delete", command=lambda: delete(user, 'Inbox', read_entry)).grid(row=2, column=1)
+        ttk.Button(inbox_tab, text="Delete", command=lambda: delete('Inbox', read_entry)).grid(row=2, column=1)
 
         def update(user_update):
             try:
@@ -108,7 +127,7 @@ def main():
                         messagebox.showerror("Error", update_content)
                     elif update_content == "Successfully Update":
                         messagebox.showinfo("Info", update_content)
-                        update_tabs(user_update_button)
+                        update_tabs()
                         update_window.withdraw()
 
                 update_window = Tk()
@@ -160,11 +179,11 @@ def main():
         update_entry = ttk.Entry(draft_tab)
         update_entry.grid(row=1, column=1)
         ttk.Button(draft_tab, text="Update", command=lambda: update(user)).grid(row=2, column=0)
-        ttk.Button(draft_tab, text="Delete", command=lambda: delete(user, 'Draft', update_entry)).grid(row=2, column=1)
+        ttk.Button(draft_tab, text="Delete", command=lambda: delete('Draft', update_entry)).grid(row=2, column=1)
 
         send_entry = ttk.Entry(send_tab)
         send_entry.grid(row=1, column=1)
-        ttk.Button(send_tab, text="Delete", command=lambda: delete(user, 'Send', send_entry)).grid(row=2, column=1)
+        ttk.Button(send_tab, text="Delete", command=lambda: delete('Send', send_entry)).grid(row=2, column=1)
 
         def write_message(receiver_entry, title_entry, body_entry):
             receiver = receiver_entry.get()
@@ -177,7 +196,7 @@ def main():
                 if written_message == "Receiver not Found":
                     messagebox.showerror("Error", "Receiver not Found")
                 else:
-                    update_tabs(user)
+                    update_tabs()
                 return written_message
 
         def send_message(receiver_entry, title_entry, body_entry, num_message=None, window=None):
@@ -186,10 +205,10 @@ def main():
             message_status = user.send_message(receiver, written_message)
             if message_status == 'Unread':
                 messagebox.showinfo("", "Message Sent")
-                update_tabs(user)
+                update_tabs()
             if num_message is not None and window is not None:
                 user.delete_message(num_message, 'Draft')
-                update_tabs(user)
+                update_tabs()
                 window.withdraw()
 
         Label(compose_tab, text="Receiver: ").grid(row=1, column=1)
@@ -225,9 +244,9 @@ def main():
     def register():
         username = username_register_entry.get()
         password = password_register_entry.get()
-        User.CREATE = True      # let to create user
+        User.CREATE = True  # let to create user
         user = User(username, password)
-        messagebox.showerror("Error", user.text)       # show there is a user with the username
+        messagebox.showerror("Error", user.text)  # show there is a user with the username
         return user
 
     # Define function login button
@@ -237,15 +256,15 @@ def main():
         global login
         username = username_login_entry.get()
         password = password_login_entry.get()
-        user = User(username, password)     # check user existence
+        user = User(username, password)  # check user existence
         if not user.found:
             messagebox.showerror("Error", "Username is Wrong!")
-        else:       # if user is found
+        else:  # if user is found
             user.login(username, password)  # try login
-            if user.text == "Password is Wrong!":   # check password
+            if user.text == "Password is Wrong!":  # check password
                 messagebox.showerror("Error", user.text)
-        if user.login_status:       # check whether login is successful or not
-            open_menu_tabs(menu_login, user)    # go to account of user
+        if user.login_status:  # check whether login is successful or not
+            open_menu_tabs(menu_login, user)  # go to account of user
         login = user.login_status
 
     # create messenger menu and set its features

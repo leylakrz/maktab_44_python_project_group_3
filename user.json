@@ -13,7 +13,7 @@
             "User": "roya",
             "Password": "1d\u000e.\u0016\u0001 \u0014*E\u0010J$FG4}",
             "Inbox": [
-                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"khubi?\", \"title\": \"hi\", \"status\": \"Read\", \"date\": \"2020-11-18\"}"
+                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"flhldkgld\", \"title\": \"salam\", \"status\": \"Unread\", \"date\": \"2020-11-18\"}"
             ],
             "Draft": [
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"jfkfhkd\", \"title\": \"\", \"status\": \"written\", \"date\": \"2020-11-18\"}"
@@ -27,10 +27,7 @@
         {
             "User": "sadegh",
             "Password": "o\u019f21LX\u0595\"Z*{\u0013\u00164\u001c@9",
-            "Inbox": [
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"warning\", \"title\": \"fire\", \"status\": \"Unread\", \"date\": \"2020-11-18\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"chetori?\", \"title\": \"salam\", \"status\": \"Unread\", \"date\": \"2020-11-18\"}"
-            ],
+            "Inbox": [],
             "Draft": [],
             "Send": [
                 "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"khubi?\", \"title\": \"hi\", \"status\": \"Sent\", \"date\": \"2020-11-18\"}"
