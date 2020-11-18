@@ -79,14 +79,14 @@ def main():
                 num_message = int(entry_box.get()) - 1
                 # user delete message from the determined box
                 delete_text = user.delete_message(num_message, box)
-                if delete_text == "Successfully Deleted":   # check whether deleting is successful or not
-                    messagebox.showinfo("Delete", delete_text)      # show success
+                if delete_text == "Successfully Deleted":  # check whether deleting is successful or not
+                    messagebox.showinfo("Delete", delete_text)  # show success
                     update_tabs()
                 else:
-                    messagebox.showerror("Error", delete_text)      # show error
+                    messagebox.showerror("Error", delete_text)  # show error
 
-            except ValueError:              # if message number is not entered correctly
-                messagebox.showerror("Error", "Please Enter a Number!")     # ask to enter it as a number
+            except ValueError:  # if message number is not entered correctly
+                messagebox.showerror("Error", "Please Enter a Number!")  # ask to enter it as a number
 
         # define function to read inbox messages
         def read():
@@ -95,7 +95,7 @@ def main():
                 num_message = int(read_entry.get()) - 1
                 # user tries to read message
                 message_content = user.read_message(num_message)
-                if message_content == "Message not Found":      # check whether the message exists or not
+                if message_content == "Message not Found":  # check whether the message exists or not
                     messagebox.showerror("Error", message_content)  # show error if message not found
                 else:
                     # create read window
@@ -110,26 +110,32 @@ def main():
                 # show error if message not found
                 messagebox.showerror("Error", "Please Enter a Number!")
 
+        # create an entry to get the message number of inbox
         Label(inbox_tab, text="Number: ").grid(row=1)
         read_entry = ttk.Entry(inbox_tab)
         read_entry.grid(row=1, column=1)
+        # create read button for inbox tab
         ttk.Button(inbox_tab, text="Read", command=read).grid(row=2, column=0)
+        # create delete button for inbox tab
         ttk.Button(inbox_tab, text="Delete", command=lambda: delete('Inbox', read_entry)).grid(row=2, column=1)
 
-        def update(user_update):
+        # define function to edit or send a message of draft box
+        # input: get the message number from number entry of draft box
+        # output: edit or send the message
+        def edit():
             try:
                 num_message_update = int(update_entry.get()) - 1
                 message_find = user.find_message('Draft', num_message_update)
 
-                def update_button(user_update_button, num_message):
+                def update_button(num_message):
                     update_receiver = receiver_update_entry.get()
                     update_title = title_update_entry.get()
                     update_body = body_update_entry.get()
-                    update_content = user_update_button.update_message(num_message,
-                                                                       receiver=update_receiver,
-                                                                       title=update_title,
-                                                                       body=update_body
-                                                                       )
+                    update_content = user.update_message(num_message,
+                                                         receiver=update_receiver,
+                                                         title=update_title,
+                                                         body=update_body
+                                                         )
                     if update_content == "Message not Found":
                         messagebox.showerror("Error", update_content)
                     elif update_content == "Successfully Update":
@@ -159,11 +165,8 @@ def main():
                 body_update_entry = Entry(update_window, text=body_value)
                 body_update_entry.grid(row=4, column=2)
 
-                update_window_button = Button(update_window,
-                                              text="Update",
-                                              command=lambda: update_button(user_update,
-                                                                            num_message_update
-                                                                            )
+                update_window_button = Button(update_window, text="Update",
+                                              command=lambda: update_button(num_message_update)
                                               )
                 update_window_button.grid(row=6, column=2)
 
@@ -185,7 +188,7 @@ def main():
         Label(draft_tab, text="Number: ").grid(row=1, column=0)
         update_entry = ttk.Entry(draft_tab)
         update_entry.grid(row=1, column=1)
-        ttk.Button(draft_tab, text="Update", command=lambda: update(user)).grid(row=2, column=0)
+        ttk.Button(draft_tab, text="Edit", command=edit).grid(row=2, column=0)
         ttk.Button(draft_tab, text="Delete", command=lambda: delete('Draft', update_entry)).grid(row=2, column=1)
 
         send_entry = ttk.Entry(send_tab)
