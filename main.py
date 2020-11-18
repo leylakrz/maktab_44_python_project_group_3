@@ -6,8 +6,13 @@ from PIL import ImageTk, Image
 
 
 def main():
-    def open_menu_tabs(login_menu, user):
-        login_menu.withdraw()
+    # Define function login button
+    # input: messenger menu and the user who succeed to login
+    def open_menu_tabs(messenger_menu, user):
+        # hide messenger menu
+        messenger_menu.withdraw()
+
+        # create welcome menu
         root = Tk()
         root.title("Welcome {}!".format(user.username))
         root.geometry("400x300+10+10")
@@ -207,7 +212,7 @@ def main():
             sign_out_text = user.sign_out()
             messagebox.showwarning("Sign out", sign_out_text)
             root.destroy()
-            login_menu.deiconify()
+            messenger_menu.deiconify()
 
         sign_out_button = Button(sign_out_tab, text="Sign Out", bg='pink', font="Courier 10 bold",
                                  command=lambda: sign_out(user))
