@@ -259,14 +259,14 @@ def main():
     tab_control_login.add(register_tab, text='Register')
     tab_control_login.add(login_tab, text='Login')
 
-    canvas_register = Canvas(register_tab, width=400, height=300)
-    image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-    canvas_register.create_image(0, 0, anchor=NW, image=image_app)
+#     canvas_register = Canvas(register_tab, width=400, height=300)
+#     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
+#     canvas_register.create_image(0, 0, anchor=NW, image=image_app)
     # canvas_register.pack(expand=1, fill="both")
 
-    canvas_login = Canvas(login_tab, width=400, height=300)
-    image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-    canvas_login.create_image(0, 0, anchor=NW, image=image_app)
+#     canvas_login = Canvas(login_tab, width=400, height=300)
+#     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
+#     canvas_login.create_image(0, 0, anchor=NW, image=image_app)
     # canvas_login.pack(expand=1, fill="both")
 
     tab_control_login.pack(expand=1, fill="both")
