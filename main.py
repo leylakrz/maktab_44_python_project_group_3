@@ -15,7 +15,7 @@ def main():
         # create welcome menu
         root = Tk()
         root.title("Welcome {}!".format(user.username))
-        root.geometry("400x300+10+10")
+        root.geometry("500x400+10+10")
 
         # create tab control for 5 tabs: inbox, draft, send, compose, sign out
         tab_control = ttk.Notebook(root)
@@ -111,13 +111,13 @@ def main():
                 messagebox.showerror("Error", "Please Enter a Number!")
 
         # create an entry to get the message number of inbox
-        Label(inbox_tab, text="Number: ").grid(row=1)
+        Label(inbox_tab, text="Number: ").grid(row=1, column=1)
         read_entry = ttk.Entry(inbox_tab)
-        read_entry.grid(row=1, column=1)
+        read_entry.grid(row=1, column=2)
         # create read button for inbox tab
-        ttk.Button(inbox_tab, text="Read", command=read).grid(row=2, column=0)
+        ttk.Button(inbox_tab, text="Read", command=read).grid(row=2, column=2)
         # create delete button for inbox tab
-        ttk.Button(inbox_tab, text="Delete", command=lambda: delete('Inbox', read_entry)).grid(row=2, column=1)
+        ttk.Button(inbox_tab, text="Delete", command=lambda: delete('Inbox', read_entry)).grid(row=3, column=2)
 
         # define function to edit or send a message of draft box
         # input: get the message number from number entry of draft box
@@ -133,21 +133,21 @@ def main():
                 # input : message number
                 # output : update message with new entries
                 def update_button(num_message):
-                    update_receiver = receiver_update_entry.get()       # get receiver
-                    update_title = title_update_entry.get()             # get title
-                    update_body = body_update_entry.get()               # get body
+                    update_receiver = receiver_update_entry.get()  # get receiver
+                    update_title = title_update_entry.get()  # get title
+                    update_body = body_update_entry.get()  # get body
                     # user updates message by new entries
                     update_content = user.update_message(num_message,
                                                          receiver=update_receiver,
                                                          title=update_title,
                                                          body=update_body
                                                          )
-                    if update_content == "Message not Found":       # check whether message found or not
-                        messagebox.showerror("Error", update_content)       # show error if message not found
+                    if update_content == "Message not Found":  # check whether message found or not
+                        messagebox.showerror("Error", update_content)  # show error if message not found
                     elif update_content == "Successfully Update":
-                        messagebox.showinfo("Info", update_content)         # show successfully update
-                        update_tabs()                                       # refresh tabs contents
-                        update_window.withdraw()                            # hide update window
+                        messagebox.showinfo("Info", update_content)  # show successfully update
+                        update_tabs()  # refresh tabs contents
+                        update_window.withdraw()  # hide update window
 
                 # create update window
                 update_window = Tk()
@@ -196,7 +196,7 @@ def main():
                 messagebox.showerror("Error", "Please Enter a Number!")
 
         # create number label and entry to get message number
-        Label(draft_tab, text="Number: ").grid(row=1, column=1)
+        Label(draft_tab, text="Number: ").grid(row=1)
         update_entry = ttk.Entry(draft_tab)
         update_entry.grid(row=1, column=2)
         # create edit button
@@ -206,7 +206,6 @@ def main():
 
         # create number label and entry to get message number
         Label(send_tab, text="Number: ").grid(row=1, column=1)
-        update_entry = ttk.Entry(draft_tab)
         send_entry = ttk.Entry(send_tab)
         send_entry.grid(row=1, column=2)
         # create delete button
@@ -216,32 +215,40 @@ def main():
         # input: values of receiver, title, body entries
         # output: written message
         def write_message(receiver_entry, title_entry, body_entry):
-            receiver = receiver_entry.get()     # get receiver
-            if receiver == "":              # check whether receiver is empty or not
+            receiver = receiver_entry.get()  # get receiver
+            if receiver == "":  # check whether receiver is empty or not
                 messagebox.showerror("Error", " Please Enter Receiver ")  # show error if not
             else:
-                title = title_entry.get()           # get title
-                body = body_entry.get()             # get body
+                title = title_entry.get()  # get title
+                body = body_entry.get()  # get body
                 # try to write a message
                 written_message = user.write_message(receiver=receiver, title=title, body=body)
-                if written_message == "Receiver not Found":         # check whether receiver exists or not
-                    messagebox.showerror("Error", "Receiver not Found")     # show error if receiver not found
-                else:                                                       # else
-                    update_tabs()                                           # update tabs contents
-                return written_message                                      # return written message
+                if written_message == "Receiver not Found":  # check whether receiver exists or not
+                    messagebox.showerror("Error", "Receiver not Found")  # show error if receiver not found
+                else:  # else
+                    update_tabs()  # update tabs contents
+                return written_message  # return written message
 
+        # define function to send a message by user
+        # input: values of receiver, title, body entries
+        # and number message and window name for handle send button in draft box
+        # output: send message
         def send_message(receiver_entry, title_entry, body_entry, num_message=None, window=None):
-            receiver = receiver_entry.get()
+            receiver = receiver_entry.get()  # get receiver
+            # try to write message
             written_message = write_message(receiver_entry, title_entry, body_entry)
+            # try to send message and id message sent successfully change its status
             message_status = user.send_message(receiver, written_message)
-            if message_status == 'Unread':
-                messagebox.showinfo("", "Message Sent")
-                update_tabs()
+            if message_status == 'Unread':  # check status of message
+                messagebox.showinfo("", "Message Sent")  # show message sent
+                update_tabs()  # update tabs contents
+                # if user tries send message in draft box and it's done successfully
                 if num_message is not None and window is not None:
-                    user.delete_message(num_message, 'Draft')
-                    update_tabs()
-                    window.withdraw()
+                    user.delete_message(num_message, 'Draft')  # delete message from draft box
+                    update_tabs()  # update tabs content
+                    window.withdraw()  # hide update window
 
+        # create labels and entries of compose bos
         Label(compose_tab, text="Receiver: ").grid(row=1, column=1)
         receiver_compose_entry = Entry(compose_tab)
         receiver_compose_entry.grid(row=1, column=2)
@@ -251,9 +258,11 @@ def main():
         Label(compose_tab, text="Body: ").grid(row=3, column=1)
         body_compose_entry = Entry(compose_tab)
         body_compose_entry.grid(row=4, column=2)
+        # create draft button
         Button(compose_tab, text='Draft', command=lambda: write_message(receiver_compose_entry,
                                                                         title_compose_entry,
                                                                         body_compose_entry)).grid(row=6, column=0)
+        # create send button
         Button(compose_tab, text='Send', command=lambda: send_message(receiver_compose_entry,
                                                                       title_compose_entry,
                                                                       body_compose_entry)).grid(row=6, column=1)
@@ -304,7 +313,7 @@ def main():
     # create messenger menu and set its features
     app = Tk()
     app.title("Messenger")
-    app.geometry("400x300+10+10")
+    app.geometry("500x400+10+10")
 
     # set an icon for messenger menu
     photo = PhotoImage(file="Messenger-logo.png")
