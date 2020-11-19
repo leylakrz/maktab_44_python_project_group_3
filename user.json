@@ -18,7 +18,6 @@
             "Draft": [],
             "Send": [
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"warning\", \"title\": \"fire\", \"status\": \"Sent\", \"date\": \"2020-11-18\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"chetori?\", \"title\": \"salam\", \"status\": \"Sent\", \"date\": \"2020-11-18\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"khubi\", \"title\": \"why\", \"status\": \"Sent\", \"date\": \"2020-11-18\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"bye\", \"title\": \"hello\", \"status\": \"Sent\", \"date\": \"2020-11-18\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"hlsfhsh\", \"title\": \"hi\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}"

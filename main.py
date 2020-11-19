@@ -30,7 +30,7 @@ def main():
         # set inbox label
         global inbox_label  # define tabs label as global to access them in update tabs function
         inbox_label = ttk.Label(inbox_tab, text=inbox_text)
-        inbox_label.grid(column=0, row=0, padx=30, pady=30)
+        inbox_label.grid(column=0, row=0)
 
         # create draft tab
         draft_tab = ttk.Frame(tab_control)
@@ -39,7 +39,7 @@ def main():
         # set draft label
         global draft_label
         draft_label = ttk.Label(draft_tab, text=draft_text)
-        draft_label.grid(column=0, row=0, padx=30, pady=30)
+        draft_label.grid(column=0, row=0)
 
         # create send tab
         send_tab = ttk.Frame(tab_control)
@@ -48,7 +48,7 @@ def main():
         # set send label
         global send_label
         send_label = ttk.Label(send_tab, text=send_text)
-        send_label.grid(column=0, row=0, padx=30, pady=30)
+        send_label.grid(column=0, row=0)
 
         # create compose tab
         compose_tab = ttk.Frame(tab_control)
@@ -191,33 +191,44 @@ def main():
                                             )
                 send_window_button.grid(row=6, column=3)
 
-            # handle if user enters wrong value for number entry
+            # handle error if user enters wrong value for number entry
             except ValueError:
                 messagebox.showerror("Error", "Please Enter a Number!")
 
-        Label(draft_tab, text="Number: ").grid(row=1, column=0)
+        # create number label and entry to get message number
+        Label(draft_tab, text="Number: ").grid(row=1, column=1)
         update_entry = ttk.Entry(draft_tab)
-        update_entry.grid(row=1, column=1)
-        ttk.Button(draft_tab, text="Edit", command=edit).grid(row=2, column=0)
-        ttk.Button(draft_tab, text="Delete", command=lambda: delete('Draft', update_entry)).grid(row=2, column=1)
+        update_entry.grid(row=1, column=2)
+        # create edit button
+        ttk.Button(draft_tab, text="Edit", command=edit).grid(row=2, column=2)
+        # create delete button
+        ttk.Button(draft_tab, text="Delete", command=lambda: delete('Draft', update_entry)).grid(row=3, column=2)
 
+        # create number label and entry to get message number
+        Label(send_tab, text="Number: ").grid(row=1, column=1)
+        update_entry = ttk.Entry(draft_tab)
         send_entry = ttk.Entry(send_tab)
-        send_entry.grid(row=1, column=1)
-        ttk.Button(send_tab, text="Delete", command=lambda: delete('Send', send_entry)).grid(row=2, column=1)
+        send_entry.grid(row=1, column=2)
+        # create delete button
+        ttk.Button(send_tab, text="Delete", command=lambda: delete('Send', send_entry)).grid(row=2, column=2)
 
+        # define function to write a new message in compose box
+        # input: values of receiver, title, body entries
+        # output: written message
         def write_message(receiver_entry, title_entry, body_entry):
-            receiver = receiver_entry.get()
-            if receiver == "":
-                messagebox.showerror("Error", " Please Enter Receiver ")
+            receiver = receiver_entry.get()     # get receiver
+            if receiver == "":              # check whether receiver is empty or not
+                messagebox.showerror("Error", " Please Enter Receiver ")  # show error if not
             else:
-                title = title_entry.get()
-                body = body_entry.get()
+                title = title_entry.get()           # get title
+                body = body_entry.get()             # get body
+                # try to write a message
                 written_message = user.write_message(receiver=receiver, title=title, body=body)
-                if written_message == "Receiver not Found":
-                    messagebox.showerror("Error", "Receiver not Found")
-                else:
-                    update_tabs()
-                return written_message
+                if written_message == "Receiver not Found":         # check whether receiver exists or not
+                    messagebox.showerror("Error", "Receiver not Found")     # show error if receiver not found
+                else:                                                       # else
+                    update_tabs()                                           # update tabs contents
+                return written_message                                      # return written message
 
         def send_message(receiver_entry, title_entry, body_entry, num_message=None, window=None):
             receiver = receiver_entry.get()
