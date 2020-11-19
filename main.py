@@ -3,7 +3,8 @@ from tkinter import messagebox
 from user import User
 from tkinter import ttk
 # from PIL import ImageTk, Image
-
+from counter import *  # to count unsuccessful login tries.
+from datetime import *
 
 def main():
     # Define function login button
@@ -286,20 +287,36 @@ def main():
     # Define function login button
     # input : messenger menu, username, password from their labels
     # output: login user if user found else show error by message box, change login status of the user
-    def login_user(menu_login):
-        global login
-        username = username_login_entry.get()
-        password = password_login_entry.get()
-        user = User(username, password)  # check user existence
-        if not user.found:
-            messagebox.showerror("Error", "Username is Wrong!")
-        else:  # if user is found
-            user.login(username, password)  # try login
-            if user.text == "Password is Wrong!":  # check password
-                messagebox.showerror("Error", user.text)
-        if user.login_status:  # check whether login is successful or not
-            open_menu_tabs(menu_login, user)  # go to account of user
-        login = user.login_status
+    def login_user(label, menu_login):
+        if count.counter < 3:
+            label.config(text="")
+            global login
+            username = username_login_entry.get()
+            password = password_login_entry.get()
+            user = User(username, password)  # check user existence
+            if not user.found:
+                messagebox.showerror("Error", "Username is Wrong!")
+            else:  # if user is found
+                user.login(username, password)  # try login
+                if user.text == "Password is Wrong!":  # check password
+                    messagebox.showerror("Error", user.text)
+            if user.login_status:  # check whether login is successful or not
+                count.reset()  # counter is incremented in unsuccessful login tries.
+                open_menu_tabs(menu_login, user)  # go to account of user
+            else:
+                count.increment()
+                if count.counter == 3:
+                    count.change_start(datetime.now())
+                    count.increment()
+                    label.config(text="wait 60 seconds and try again.")
+
+            login = user.login_status
+        else:
+            wait = int(10 - (datetime.now() - count.start_time).total_seconds())
+            if wait > 0:
+                label.config(text="wait {} seconds and try again.".format(wait))
+            else:
+                count.reset()
 
     # create messenger menu and set its features
     app = Tk()
@@ -360,9 +377,12 @@ def main():
     password_login_entry.grid(row=1, column=1)
 
     # put login button
-    login_button = Button(login_tab, text='Login', command=lambda: login_user(app))
+    login_button = Button(login_tab, text='Login', command=lambda: login_user(wait_label, app))
     login_button.grid(row=2, column=1)
     ttk.Label(login_tab, text="").grid(row=6, column=1)
+
+    wait_label = Label(login_tab, text="")
+    wait_label.grid(row=0, column=5)
 
     # num_lock = 1
     # login = False

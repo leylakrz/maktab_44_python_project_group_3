@@ -40,7 +40,6 @@ class User:
         self.login_status = False
         self.unread_messages = 0
         self.message_count = 0
-        self.try_login = 0
         if self.check_space(username) and self.check_space(password):
             register_data = read_json()
             for item in register_data['data']:
@@ -82,7 +81,6 @@ class User:
                 break
         else:
             self.text = "Password is Wrong!"
-        self.try_login += 1
         return self.login_status
 
         # while data['data']username_input \
