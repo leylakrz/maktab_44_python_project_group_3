@@ -124,29 +124,37 @@ def main():
         # output: edit or send the message
         def edit():
             try:
+                # get number of message from the number entry of draft
                 num_message_update = int(update_entry.get()) - 1
+                # user finds message from the draft box by the message number
                 message_find = user.find_message('Draft', num_message_update)
 
+                # define function for update button
+                # input : message number
+                # output : update message with new entries
                 def update_button(num_message):
-                    update_receiver = receiver_update_entry.get()
-                    update_title = title_update_entry.get()
-                    update_body = body_update_entry.get()
+                    update_receiver = receiver_update_entry.get()       # get receiver
+                    update_title = title_update_entry.get()             # get title
+                    update_body = body_update_entry.get()               # get body
+                    # user updates message by new entries
                     update_content = user.update_message(num_message,
                                                          receiver=update_receiver,
                                                          title=update_title,
                                                          body=update_body
                                                          )
-                    if update_content == "Message not Found":
-                        messagebox.showerror("Error", update_content)
+                    if update_content == "Message not Found":       # check whether message found or not
+                        messagebox.showerror("Error", update_content)       # show error if message not found
                     elif update_content == "Successfully Update":
-                        messagebox.showinfo("Info", update_content)
-                        update_tabs()
-                        update_window.withdraw()
+                        messagebox.showinfo("Info", update_content)         # show successfully update
+                        update_tabs()                                       # refresh tabs contents
+                        update_window.withdraw()                            # hide update window
 
+                # create update window
                 update_window = Tk()
                 update_window.geometry("300x300+10+10")
                 update_window.title("Update")
 
+                # create entries which are set with receiver, title and body of found message
                 receiver_update_label = Label(update_window, text="Receiver")
                 receiver_update_label.grid(row=1, column=1)
                 receiver_value = StringVar(update_window, value=message_find.receiver)
@@ -165,11 +173,13 @@ def main():
                 body_update_entry = Entry(update_window, text=body_value)
                 body_update_entry.grid(row=4, column=2)
 
+                # create update button
                 update_window_button = Button(update_window, text="Update",
                                               command=lambda: update_button(num_message_update)
                                               )
                 update_window_button.grid(row=6, column=2)
 
+                # create send button to send updated message if user wants
                 send_window_button = Button(update_window,
                                             text="Send",
                                             command=lambda: send_message(receiver_update_entry,
@@ -181,7 +191,7 @@ def main():
                                             )
                 send_window_button.grid(row=6, column=3)
 
-
+            # handle if user enters wrong value for number entry
             except ValueError:
                 messagebox.showerror("Error", "Please Enter a Number!")
 
@@ -216,10 +226,10 @@ def main():
             if message_status == 'Unread':
                 messagebox.showinfo("", "Message Sent")
                 update_tabs()
-            if num_message is not None and window is not None:
-                user.delete_message(num_message, 'Draft')
-                update_tabs()
-                window.withdraw()
+                if num_message is not None and window is not None:
+                    user.delete_message(num_message, 'Draft')
+                    update_tabs()
+                    window.withdraw()
 
         Label(compose_tab, text="Receiver: ").grid(row=1, column=1)
         receiver_compose_entry = Entry(compose_tab)
@@ -239,10 +249,10 @@ def main():
 
         # define function for sign button
         def sign_out():
-            sign_out_text = user.sign_out()     # sign out user
-            messagebox.showwarning("Sign out", sign_out_text)       # show sign out
-            root.destroy()      # destroy account menu
-            messenger_menu.deiconify()      # show messenger menu
+            sign_out_text = user.sign_out()  # sign out user
+            messagebox.showwarning("Sign out", sign_out_text)  # show sign out
+            root.destroy()  # destroy account menu
+            messenger_menu.deiconify()  # show messenger menu
 
         # create sign out button
         sign_out_button = Button(sign_out_tab, text="Sign Out", bg='pink', font="Courier 10 bold",
