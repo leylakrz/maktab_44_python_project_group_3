@@ -2,22 +2,13 @@
     "name": "users",
     "data": [
         {
-            "User": "",
-            "Password": "}$^\u0001/\u00172kk&\u000b\u0004'\u000b`\u0003\u0016\u05de\u001b2Y",
-            "Inbox": [],
-            "Draft": [],
-            "Send": [],
-            "Salt": "2852635b7d89f7caf01dbea9b422dbd9b8baaf2008937dfb6551d855c5bfbe20"
-        },
-        {
             "User": "roya",
             "Password": "1d\u000e.\u0016\u0001 \u0014*E\u0010J$FG4}",
             "Inbox": [],
-            "Draft": [
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"flskf\", \"title\": \"fnls\", \"status\": \"written\", \"date\": \"2020-11-19\"}"
-            ],
+            "Draft": [],
             "Send": [
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"hlsfhsh\", \"title\": \"hi\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}"
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"flskf\", \"title\": \"hello\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}",
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"fjslkf\", \"title\": \"maram\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}"
             ],
             "Salt": "5ddf224209e1c9a1adf191ef45d71d433b2b804c00a813bf647b19f9ef6f8a5d"
         },
@@ -25,12 +16,13 @@
             "User": "sadegh",
             "Password": "o\u019f21LX\u0595\"Z*{\u0013\u00164\u001c@9",
             "Inbox": [
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"bye\", \"title\": \"hello\", \"status\": \"Unread\", \"date\": \"2020-11-18\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"hlsfhsh\", \"title\": \"hi\", \"status\": \"Unread\", \"date\": \"2020-11-19\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"danger\", \"title\": \"fire warring\", \"status\": \"Unread\", \"date\": \"2020-11-19\"}"
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"bye\", \"title\": \"hello\", \"status\": \"Read\", \"date\": \"2020-11-18\"}",
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"hlsfhsh\", \"title\": \"hi\", \"status\": \"Read\", \"date\": \"2020-11-19\"}",
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"danger\", \"title\": \"fire warring\", \"status\": \"Read\", \"date\": \"2020-11-19\"}",
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"flskf\", \"title\": \"hello\", \"status\": \"Unread\", \"date\": \"2020-11-19\"}",
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"fjslkf\", \"title\": \"maram\", \"status\": \"Read\", \"date\": \"2020-11-19\"}"
             ],
             "Draft": [
-                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"tours\", \"title\": \"ads\", \"status\": \"written\", \"date\": \"2020-11-19\"}",
                 "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"tours\", \"title\": \"ads\", \"status\": \"written\", \"date\": \"2020-11-19\"}"
             ],
             "Send": [
@@ -53,6 +45,22 @@
             "Draft": [],
             "Send": [],
             "Salt": "e83e8faaff00181ebce385d4efda8f3bb46272da4427b0a63b5ec05e0995a310"
+        },
+        {
+            "User": "ghazal",
+            "Password": "~5Y\u0003:$XngA\u039e\u0019qC:\u04f0$*",
+            "Inbox": [],
+            "Draft": [],
+            "Send": [],
+            "Salt": "d8f30b0e05430ff0495d88011f1190dd9aa927ae2aa314f76a692ca78c4a4aab"
+        },
+        {
+            "User": "mazi",
+            "Password": "m\u000b\u0661\u001dT\u0015<\u0003\rg5\u0737B\u0012'\u0019)\u0011",
+            "Inbox": [],
+            "Draft": [],
+            "Send": [],
+            "Salt": "330a72894942ded9b4b5afc0f3a1866f09eb33077c3b4eebf1117eb8082a0a73"
         }
     ]
 }

@@ -43,7 +43,7 @@ class User:
         register_data = read_json()
         for item in register_data['data']:
             if item['User'] == self.username:
-                self.text = "ُThere is {}".format(self.username) + '\n' + "Change username"
+                self.text = "{} already in use!".format(self.username) + '\n\n' + "Change Your Username"
                 self.found = True
                 break
         if not self.found and User.CREATE:
@@ -57,7 +57,7 @@ class User:
             }
             add_user_info(user_info)
             # add_user_info('user.json', user_info)
-            self.text = "ُRegister is complete! {}".format(self.username)
+            self.text = "Register is Complete {}".format(self.username)
             User.CREATE = False
 
     # login: check username and password and if they are correct, let the user to log in to the mail box
@@ -193,41 +193,40 @@ class User:
                     return "Message not Found"
 
     def get_user_info(self):
-        inbox_text = "No    Sender        Title        Data " + '\n'
-        draft_text = "No    Receiver      Title      Data " + '\n'
-        send_text = "No     Receiver       Title       Data " + '\n'
+        space_inbox = "----------------------------------------------------------------------"
+        space = "------------------------------------------"
+        inbox_text = '{:5} {:15s} {:30} {:25s} {:15} '.format("No", "Sender", "Title", "Date", "Read Status") +\
+                     '\n' + space_inbox + '\n'
+        draft_text = '{:5} {:15s} {:20s} {:15s} '.format("No", "Receiver", "Title", "Date") + '\n' + space + '\n'
+        send_text = '{:5} {:15s} {:20s} {:15s} '.format("No", "Receiver", "Title", "Date") + '\n' + space + '\n'
         data = read_json()
+        check_read = ''
 
         for item in data['data']:
             if item['User'] == self.username:
                 for message in item['Inbox']:
                     number_message_inbox = str(item['Inbox'].index(message) + 1)
                     m = Message.from_json(message)
-                    inbox_text += number_message_inbox + '        ' + m.sender + '         ' + m.title + '\t' + m.date + '\n'
+                    if m.status == 'Read':
+                        check_read = '\u2713'
+                    elif m.status == 'Unread':
+                        check_read = '\u2613'
+                    else:
+                        check_read = ''
+                    inbox_text += '{:5} {:15s} {:30s} {:25s} {:15}  '.format(number_message_inbox, m.sender,
+                                                                             m.title, m.date, check_read) +\
+                                  '\n' + space_inbox + '\n'
                 for message in item['Draft']:
                     number_message_draft = str(item['Draft'].index(message) + 1)
                     m = Message.from_json(message)
-                    draft_text += number_message_draft + '        ' + m.receiver + '          ' + m.title + '\t' + m.date + '\n'
+                    draft_text += '{:7} {:15s} {:20s} {:15s} '.format(number_message_draft, m.receiver,
+                                                                      m.title, m.date) + '\n' + space + '\n'
                 for message in item['Send']:
                     number_message_sent = str(item['Send'].index(message) + 1)
                     m = Message.from_json(message)
-                    send_text += number_message_sent + '        ' + m.receiver + '             ' + m.title + '\t' + m.date + '\n'
+                    send_text += '{:5} {:15s} {:20s} {:15s} '.format(number_message_sent, m.receiver,
+                                                                     m.title, m.date) + '\n' + space + '\n'
         return inbox_text, draft_text, send_text
-
-    # read_message: read a message from the inbox of the user by its number or the message
-    # def read_message(self, message):
-    #     self.check_login_status()  # check login status to allow to read a message
-    #     print()
-    #     try:
-    #         if isinstance(message, int):  # if input is the number of the message
-    #             # find the message in the message list by its number, then read by the read method of Message class
-    #             return self.message_list[message - 1].read()
-    #         elif isinstance(message, Message):  # if input is the message
-    #             return message.read()  # return the message read by the read method
-    #         self.unread_messages -= 1  # decrement the number of unread messages list
-    #
-    #     except IndexError:  # handle IndexError exception for the message list
-    #         print("*** This message does not exist ***")  # print the message does not exist
 
     # delete_message: let the user to delete any message from any box with its number
     def delete_message(self, num_message, box):
@@ -260,19 +259,3 @@ class User:
         # self.message_list.remove(message)  # remove the message from the message list
         # self.message_count -= 1  # decrement the number of messages
 
-    # show_inbox: show the inbox of the user
-    # def show_inbox(self):
-    #     self.check_login_status()  # check login status to allow the user to show the inbox
-    #     print()
-    #     print("Inbox:             Sender   Read   Title")  # print the menu of the inbox
-    #     print("                   ------   -----  -----")
-    #     for i in range(1, len(self.message_list) + 1):  # for every message in message list
-    #         # read check :  tick symbol if the status of the message is read else print ⨉
-    #         read_check = '\u2713' if self.message_list[i - 1].status == 'Read' else '\u2613'
-    #         # print sender , read_check , title of the message
-    #         print("       message {}   {}      {}     {}".format(i, self.message_list[i - 1].sender,
-    #                                                              read_check,
-    #                                                              self.message_list[i - 1].title)
-    #               )
-
-#

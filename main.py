@@ -15,7 +15,7 @@ def main():
         # create welcome menu
         root = Tk()
         root.title("Welcome {}!".format(user.username))
-        root.geometry("500x400+10+10")
+        root.geometry("600x500+10+10")
 
         # create tab control for 5 tabs: inbox, draft, send, compose, sign out
         tab_control = ttk.Notebook(root)
@@ -104,6 +104,7 @@ def main():
                     read_window.title("Title: {}".format(message_content[1].title))
                     # show message
                     Label(read_window, text=message_content[0]).grid(row=0, column=1)
+                    update_tabs()
                     read_window.mainloop()
             # if message number is not entered correctly
             except ValueError:
@@ -196,7 +197,7 @@ def main():
                 messagebox.showerror("Error", "Please Enter a Number!")
 
         # create number label and entry to get message number
-        Label(draft_tab, text="Number: ").grid(row=1)
+        Label(draft_tab, text="Number: ").grid(row=1, column=1)
         update_entry = ttk.Entry(draft_tab)
         update_entry.grid(row=1, column=2)
         # create edit button
@@ -249,23 +250,23 @@ def main():
                     window.withdraw()  # hide update window
 
         # create labels and entries of compose bos
-        Label(compose_tab, text="Receiver: ").grid(row=1, column=1)
+        Label(compose_tab, text="Receiver:").grid(row=0)
         receiver_compose_entry = Entry(compose_tab)
-        receiver_compose_entry.grid(row=1, column=2)
-        Label(compose_tab, text="Title: ").grid(row=2, column=1)
+        receiver_compose_entry.grid(row=0, column=1)
+        Label(compose_tab, text="Title:").grid(row=1)
         title_compose_entry = Entry(compose_tab)
-        title_compose_entry.grid(row=2, column=2)
-        Label(compose_tab, text="Body: ").grid(row=3, column=1)
+        title_compose_entry.grid(row=1, column=1)
+        Label(compose_tab, text="Body:").grid(row=2)
         body_compose_entry = Entry(compose_tab)
-        body_compose_entry.grid(row=4, column=2)
+        body_compose_entry.grid(row=3, column=1)
         # create draft button
         Button(compose_tab, text='Draft', command=lambda: write_message(receiver_compose_entry,
                                                                         title_compose_entry,
-                                                                        body_compose_entry)).grid(row=6, column=0)
+                                                                        body_compose_entry)).grid(row=4)
         # create send button
         Button(compose_tab, text='Send', command=lambda: send_message(receiver_compose_entry,
                                                                       title_compose_entry,
-                                                                      body_compose_entry)).grid(row=6, column=1)
+                                                                      body_compose_entry)).grid(row=4, column=1)
 
         # define function for sign button
         def sign_out():
@@ -287,10 +288,17 @@ def main():
     def register():
         username = username_register_entry.get()
         password = password_register_entry.get()
-        User.CREATE = True  # let to create user
-        user = User(username, password)
-        messagebox.showerror("Error", user.text)  # show there is a user with the username
-        return user
+        # handle username or password not be empty or white space
+        if username == "" or username.isspace() or password == "" or password.isspace():
+            messagebox.showerror("Error", "Username or Password can not be Empty" + '\n\n' + "or be just White Space")
+        else:
+            User.CREATE = True  # let to create user
+            user = User(username, password)
+            if user.text == "Register is Complete {}".format(user.username):
+                messagebox.showinfo("Welcome!", user.text)      # welcome to user
+            else:
+                messagebox.showerror("Error", user.text)  # show there is a user with the username
+            return user
 
     # Define function login button
     # input : messenger menu, username, password from their labels
