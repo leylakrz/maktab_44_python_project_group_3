@@ -40,25 +40,30 @@ class User:
         self.login_status = False
         self.unread_messages = 0
         self.message_count = 0
-        register_data = read_json()
-        for item in register_data['data']:
-            if item['User'] == self.username:
-                self.text = "ُThere is {}".format(self.username) + '\n' + "Change username"
-                self.found = True
-                break
-        if not self.found and User.CREATE:
-            user_info = {
-                "User": self.username,
-                "Password": self.hash_password.decode(errors="ignore"),
-                "Inbox": self.inbox,
-                "Draft": self.draft,
-                "Send": self.send,
-                "Salt": binascii.hexlify(User.SALT).decode()
-            }
-            add_user_info(user_info)
-            # add_user_info('user.json', user_info)
-            self.text = "ُRegister is complete! {}".format(self.username)
-            User.CREATE = False
+        self.try_login = 0
+        if self.check_space(username) and self.check_space(password):
+            register_data = read_json()
+            for item in register_data['data']:
+                if item['User'] == self.username:
+                    self.text = "ُThere is {}".format(self.username) + '\n' + "Change username"
+                    self.found = True
+                    break
+
+            if not self.found and User.CREATE:
+                user_info = {
+                    "User": self.username,
+                    "Password": self.hash_password.decode(errors="ignore"),
+                    "Inbox": self.inbox,
+                    "Draft": self.draft,
+                    "Send": self.send,
+                    "Salt": binascii.hexlify(User.SALT).decode()
+                }
+                add_user_info(user_info)
+                # add_user_info('user.json', user_info)
+                self.text = "ُRegister is complete! {}".format(self.username)
+                User.CREATE = False
+        else:
+            self.text = "add another character to the spaces in your username of password."
 
     # login: check username and password and if they are correct, let the user to log in to the mail box
     def login(self, username_input, password_input):
@@ -77,6 +82,7 @@ class User:
                 break
         else:
             self.text = "Password is Wrong!"
+        self.try_login += 1
         return self.login_status
 
         # while data['data']username_input \
@@ -275,4 +281,8 @@ class User:
     #                                                              self.message_list[i - 1].title)
     #               )
 
-#
+    @staticmethod
+    def check_space(str):
+        if str != " "*len(str):
+            return True
+        return False

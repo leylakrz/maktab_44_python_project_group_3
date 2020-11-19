@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from user import User
 from tkinter import ttk
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 
 def main():
