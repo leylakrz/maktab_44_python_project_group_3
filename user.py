@@ -38,3 +38,5 @@ class User:
             logger.warning("attempt to log in with wrong username")
             Panel.create_label(label_parent,
                                [{"Label": {"text": "username not found"}, "grid": {"row": 5, "column": 1}}])
+
+

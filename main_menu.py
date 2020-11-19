@@ -53,7 +53,7 @@ def main_menu_window_run():
     # log out
     main_menu_window.create_button(main_menu_tabs["log out"],
                                    [{"Button": {"text": "log out", "command": main_menu_window.close_screen},
-                                     "grid": {"row": 0, "column": 0}}])
+                                     "grid": {"row": 0, "column": 1}}])
 
     main_menu_window.show_screen()
 

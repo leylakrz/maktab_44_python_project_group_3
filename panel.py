@@ -53,3 +53,7 @@ class Panel:
             entries[entry_name] = Entry(parent, **entries_features[i]["Entry"])
             entries[entry_name].grid(**entries_features[i]["grid"])
         return entries
+
+
+    # b = Button(text = "sth", command = test)
+    # b.grid(row = 1)
