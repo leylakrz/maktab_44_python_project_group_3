@@ -9,11 +9,11 @@
                 "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"khubi?\", \"title\": \"Re: hello\", \"status\": \"Read\", \"date\": \"2020-11-20\"}",
                 "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"chetoriiiiii?\", \"title\": \"Re: hello\", \"status\": \"Unread\", \"date\": \"2020-11-20\"}",
                 "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"hiii\", \"title\": \"Re: maram\", \"status\": \"Read\", \"date\": \"2020-11-20\"}",
-                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"bye\", \"title\": \"Re: hello\", \"status\": \"Read\", \"date\": \"2020-11-20\"}",
-                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"didi\", \"title\": \"Re: Re: Re: hello\", \"status\": \"Read\", \"date\": \"2020-11-20\"}",
-                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"Do you like chocolate? We can suprise you for Valentine's day \", \"title\": \"lovely gift\", \"status\": \"Read\", \"date\": \"2020-11-20\"}"
+                "{\"sender\": \"sadegh\", \"receiver\": \"roya\", \"body\": \"bye\", \"title\": \"Re: hello\", \"status\": \"Read\", \"date\": \"2020-11-20\"}"
             ],
-            "Draft": [],
+            "Draft": [
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"why not?\", \"title\": \"my dream\", \"status\": \"written\", \"date\": \"2020-11-20\"}"
+            ],
             "Send": [
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"flskf\", \"title\": \"hello\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"fjslkf\", \"title\": \"maram\", \"status\": \"Sent\", \"date\": \"2020-11-19\"}",
@@ -21,8 +21,7 @@
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"bye\", \"title\": \"hello\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"khodafez\", \"title\": \"yellow\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}",
                 "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"dorosere\", \"title\": \"Re: Re: hello\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"yes, Please!\", \"title\": \"Re: lovely gift\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}",
-                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"yes! please\", \"title\": \"Re: lovely gift\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}"
+                "{\"sender\": \"roya\", \"receiver\": \"sadegh\", \"body\": \"yes, Please!\", \"title\": \"Re: lovely gift\", \"status\": \"Sent\", \"date\": \"2020-11-20\"}"
             ],
             "Salt": "5ddf224209e1c9a1adf191ef45d71d433b2b804c00a813bf647b19f9ef6f8a5d"
         },
