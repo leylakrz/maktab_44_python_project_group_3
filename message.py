@@ -17,6 +17,8 @@ class Message:
         edit :      edit sender or receiver or text or title or date of the message
         read :      change status of message to Read & print the info of the message
         del :       override __del__() to enable it to delete a message object
+        from_json: class method: get info from json and convert to a Message instance
+
     """
 
     def __init__(self, sender, receiver, body=None, title=None, status="written", date=datetime.now().date()):
@@ -58,6 +60,7 @@ class Message:
         class_name = self.__class__.__name__
         return class_name + " Destroyed"
 
+    # from json class method: get info from json and convert to a Message instance
     @classmethod
     def from_json(cls, json_str):
         json_dict = json.loads(json_str)

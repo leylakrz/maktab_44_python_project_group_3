@@ -13,10 +13,12 @@ class User:
     Attributes:
         username:       string, the name of user
         hash_password:  string, the hash of the password
-        message_list:   list , keep messages of the user
+        inbox:  list , keep messages received by user
+        draft: list, keep a draft of messages
+        send: list, keep messages sent bby user
         login_status:   boolean, show whether the user has logged in to the system or not
-        unread_messages: int , the number of unread messages
-        message_count:  int, the number of messages
+        SAlT: class attribute, keep a random value for hash function
+        CREATE: class attribute, boolean: allow to create a new user
 
     Methods:
         login:       check username and password and if they are correct, let the user to log in to the mail box
@@ -24,8 +26,10 @@ class User:
         send_message: let the user to send a message to another user
         update_message: let the user to edit message
         read_message: read a message from the inbox of the user by its number
+        write_message: let the user to write a message
         delete_message: let the user to delete any message
-        show_inbox:     show the inbox of the user
+        get_info_user: return info of inbox, draft, send box of user as string
+        find_message: let user to find a message through its number
     """
     SALT = os.urandom(32)
     CREATE = False
@@ -38,8 +42,8 @@ class User:
         self.send = []
         self.found = False
         self.login_status = False
-        self.unread_messages = 0
-        self.message_count = 0
+        # self.unread_messages = 0
+        # self.message_count = 0
         register_data = read_json()
         for item in register_data['data']:
             if item['User'] == self.username:
@@ -79,22 +83,6 @@ class User:
             self.text = "Password is Wrong!"
         return self.login_status
 
-        # while data['data']username_input \
-        #         or self.hash_password != hashlib.pbkdf2_hmac('sha256', password_input.encode('utf-8'), self.salt,
-        #                                                      100000):
-        #     if num_lock >= 3:  # lock Account if the user enter wrong username / password more than 3 times
-        #         print("Account is Locked!")
-        #         break
-        #     else:  # Ask to log in again if username or password is wrong
-        #         print("Username or Password is wrong! Try Again ...")
-        #         username_input = input("Enter Username: ")
-        #         password_input = input("Enter password: ")
-        #
-        #     num_lock += 1
-        # else:  # let log in if username or password is correct and change the login_status of the user
-        #     self.login_status = True
-        #     print("*** Welcome! {} ***".format(self.username))
-
     # sign_out: let the user to exit from mail box
     def sign_out(self):
         self.login_status = False  # change the login_status to False
@@ -116,24 +104,23 @@ class User:
         try:
             send_data = read_json()
             found_receiver = False
-            if message.status == 'written':
+            if message.status == 'written':         # check status of message
                 for item in send_data['data']:
-                    if item['User'] == receiver_username:
-                        found_receiver = True
+                    if item['User'] == receiver_username:   # find receiver
+                        found_receiver = True               # if receiver finding  is successful
                         for user in send_data['data']:
-                            if user['User'] == self.username:
+                            if user['User'] == self.username:       # find sender
+                                # delete message from sender draft box
                                 user['Draft'].remove(json.dumps(message.__dict__))
-                                message.status = 'Sent'
+                                message.status = 'Sent'         # change message status to sent
+                                # add message to sender send box
                                 user['Send'].append(json.dumps(message.__dict__))
-                        message.status = 'Unread'
+                        message.status = 'Unread'           # change message status to unread
+                        # add message to sender inbox
                         item['Inbox'].append(json.dumps(message.__dict__))
-                    write_json(send_data)
+                    write_json(send_data)       # write changes to json file
             if not found_receiver:
                 print("*** Receiver not found ***")
-            # receiver.inbox.append(message)  # add message to the inbox list of the receiver
-            # receiver.unread_messages += 1  # increment the number of unread messages
-            # receiver.message_count += 1  # increment the number of messages
-            # self.send.append(message)  # add message to the send list of the sender
             print("{}: The message was sent to {}!".format(self.username, receiver_username))  # print message was sent
             return message.status
         except AttributeError:
@@ -145,16 +132,18 @@ class User:
         print()
         data = read_json()
         for item_read in data['data']:
-            if item_read["User"] == self.username:
+            if item_read["User"] == self.username:  # find user
                 try:
-                    content = item_read["Draft"][num_message]
-                    message_content = Message.from_json(content)
+                    content = item_read["Draft"][num_message]  # try find message in draft bax by its number
+                    message_content = Message.from_json(content)        # extract message from json file
+                    # update message with new entries
                     update_content = message_content.update(receiver=receiver, body=body, title=title, date=date)
+                    # add updated message to draft box
                     item_read["Draft"][num_message] = json.dumps(update_content.__dict__)
-                    write_json(data)
-                    return "Successfully Update"
-                except IndexError:
-                    return "Message not Found"
+                    write_json(data)        # and write in json file
+                    return "Successfully Update"        # show success
+                except IndexError:                      # if message not found
+                    return "Message not Found"          # show error
 
     # write_message: let the user to write a message
     def write_message(self, receiver, body=None, title=None, date=datetime.now().date()):
@@ -193,9 +182,10 @@ class User:
                     return "Message not Found"
 
     def get_user_info(self):
+        # write titles of string
         space_inbox = "----------------------------------------------------------------------"
         space = "------------------------------------------"
-        inbox_text = '{:5} {:15s} {:30} {:25s} {:15} '.format("No", "Sender", "Title", "Date", "Read Status") +\
+        inbox_text = '{:5} {:15s} {:30} {:25s} {:15} '.format("No", "Sender", "Title", "Date", "Read Status") + \
                      '\n' + space_inbox + '\n'
         draft_text = '{:5} {:15s} {:20s} {:15s} '.format("No", "Receiver", "Title", "Date") + '\n' + space + '\n'
         send_text = '{:5} {:15s} {:20s} {:15s} '.format("No", "Receiver", "Title", "Date") + '\n' + space + '\n'
@@ -205,7 +195,9 @@ class User:
         for item in data['data']:
             if item['User'] == self.username:
                 for message in item['Inbox']:
+                    # find message from inbox by its number
                     number_message_inbox = str(item['Inbox'].index(message) + 1)
+                    # if the message status is read show tick elif it is unread show cross else show nothing
                     m = Message.from_json(message)
                     if m.status == 'Read':
                         check_read = '\u2713'
@@ -213,20 +205,25 @@ class User:
                         check_read = '\u2613'
                     else:
                         check_read = ''
+                    # get information of message and show in a string
                     inbox_text += '{:5} {:15s} {:30s} {:25s} {:15}  '.format(number_message_inbox, m.sender,
-                                                                             m.title, m.date, check_read) +\
+                                                                             m.title, m.date, check_read) + \
                                   '\n' + space_inbox + '\n'
                 for message in item['Draft']:
+                    # find message from draft by its number
                     number_message_draft = str(item['Draft'].index(message) + 1)
                     m = Message.from_json(message)
+                    # get information of message and show in a string
                     draft_text += '{:7} {:15s} {:20s} {:15s} '.format(number_message_draft, m.receiver,
                                                                       m.title, m.date) + '\n' + space + '\n'
                 for message in item['Send']:
+                    # find message from send by its number
                     number_message_sent = str(item['Send'].index(message) + 1)
                     m = Message.from_json(message)
+                    # get information of message and show in a string
                     send_text += '{:5} {:15s} {:20s} {:15s} '.format(number_message_sent, m.receiver,
                                                                      m.title, m.date) + '\n' + space + '\n'
-        return inbox_text, draft_text, send_text
+        return inbox_text, draft_text, send_text        # return info as a string
 
     # delete_message: let the user to delete any message from any box with its number
     def delete_message(self, num_message, box):
@@ -245,6 +242,7 @@ class User:
                 except IndexError:
                     return "Message not Found"
 
+    # find_message: let user to find a message through its number
     def find_message(self, box, num_message):
         find_date = read_json()
         try:
@@ -255,7 +253,3 @@ class User:
                     return find_message
         except IndexError:
             return "Message not Found"
-        # message = self.message_list[num_message - 1]  # find the message by its index in the message list
-        # self.message_list.remove(message)  # remove the message from the message list
-        # self.message_count -= 1  # decrement the number of messages
-
