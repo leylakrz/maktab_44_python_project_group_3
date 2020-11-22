@@ -104,7 +104,8 @@ def main():
                     read_window.title("Title: {}".format(message_content[1].title))
                     # show message
                     Label(read_window, text=message_content[0]).grid(row=0, column=1)
-                    ttk.Button(read_window, text="Reply", command=lambda: edit('Inbox', read_entry)).grid(row=4,column=1)
+                    ttk.Button(read_window, text="Reply", command=lambda: edit('Inbox', read_entry)).grid(row=4,
+                                                                                                          column=1)
                     update_tabs()
                     read_window.mainloop()
             # if message number is not entered correctly
@@ -309,8 +310,9 @@ def main():
         if username == "" or username.isspace() or password == "" or password.isspace():
             messagebox.showerror("Error", "Username or Password can not be Empty" + '\n\n' + "or be just White Space")
         else:
-            User.CREATE = True  # let to create user
+            # User.CREATE = True  # let to create user
             user = User(username, password)
+            user.register()
             if user.text == "Register is Complete {}".format(user.username):
                 messagebox.showinfo("Welcome!", user.text)  # welcome to user
             else:
@@ -325,10 +327,13 @@ def main():
         username = username_login_entry.get()
         password = password_login_entry.get()
         user = User(username, password)  # check user existence
+        user.login(username, password)
         if not user.found:
             messagebox.showerror("Error", "Username is Wrong!")
         else:  # if user is found
-            user.login(username, password)  # try login
+            # user.login(username, password)  # try login
+            # print(user.username)
+            # print(user.hash_password)
             if user.text == "Password is Wrong!":  # check password
                 messagebox.showerror("Error", user.text)
         if user.login_status:  # check whether login is successful or not
@@ -352,16 +357,6 @@ def main():
 
     tab_control_login.add(register_tab, text='Register')
     tab_control_login.add(login_tab, text='Login')
-
-    #     canvas_register = Canvas(register_tab, width=400, height=300)
-    #     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-    #     canvas_register.create_image(0, 0, anchor=NW, image=image_app)
-    # canvas_register.pack(expand=1, fill="both")
-
-    #     canvas_login = Canvas(login_tab, width=400, height=300)
-    #     image_app = ImageTk.PhotoImage(Image.open("background.jpg"))
-    #     canvas_login.create_image(0, 0, anchor=NW, image=image_app)
-    # canvas_login.pack(expand=1, fill="both")
 
     tab_control_login.pack(expand=1, fill="both")
 
@@ -397,19 +392,6 @@ def main():
     login_button = Button(login_tab, text='Login', command=lambda: login_user(app))
     login_button.grid(row=2, column=1)
     ttk.Label(login_tab, text="").grid(row=6, column=1)
-
-    # num_lock = 1
-    # login = False
-    # while num_lock <= 3 and not login:
-    #     login_button = Button(app, text='Login', command=lambda: login_user(app))
-    #     login_button.grid(row=2, column=1)
-    #     if num_lock > 3:
-    #         messagebox.showerror("Error", "Lock!")
-    #         exit()
-    #     if not login:
-    #         num_lock += 1
-    #     else:
-    #         break
 
     # show messenger menu
     app.mainloop()
