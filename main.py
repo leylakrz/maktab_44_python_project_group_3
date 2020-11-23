@@ -143,85 +143,89 @@ def main():
                 # user finds message from the draft box by the message number
                 # message_find = user.find_message('Draft', num_message_update)
                 message_find = user.find_message(box, num_message_update)
+                if message_find == "Message not Found":
+                    messagebox.showerror("Error", "Message not Found")
+                    logger.error("IndexError")
+                else:
 
-                # define function for update button
-                # input : message number
-                # output : update message with new entries
-                def update_button(box, num_message):
-                    update_receiver = receiver_update_entry.get()  # get receiver
-                    update_title = title_update_entry.get()  # get title
-                    update_body = body_update_entry.get()  # get body
-                    if box == 'Draft':
-                        # user updates message by new entries
-                        update_content = user.update_message(num_message,
-                                                             receiver=update_receiver,
-                                                             title=update_title,
-                                                             body=update_body
-                                                             )
+                    # define function for update button
+                    # input : message number
+                    # output : update message with new entries
+                    def update_button(box, num_message):
+                        update_receiver = receiver_update_entry.get()  # get receiver
+                        update_title = title_update_entry.get()  # get title
+                        update_body = body_update_entry.get()  # get body
+                        if box == 'Draft':
+                            # user updates message by new entries
+                            update_content = user.update_message(num_message,
+                                                                 receiver=update_receiver,
+                                                                 title=update_title,
+                                                                 body=update_body
+                                                                 )
+                        else:
+                            update_content = user.write_message(receiver=update_receiver,
+                                                                title=update_title,
+                                                                body=update_body)
+                            update_tabs()
+                            update_window.withdraw()
+                        if update_content == "Message not Found":  # check whether message found or not
+                            messagebox.showerror("Error", update_content)  # show error if message not found
+                            logger.warning("attempt to update none existent message")
+                        elif update_content == "Successfully Update":
+                            messagebox.showinfo("Info", update_content)  # show successfully update
+                            logger.info("message updated")
+                            update_tabs()  # refresh tabs contents
+                            update_window.withdraw()  # hide update window
+
+                    # create update window
+                    update_window = Tk()
+                    update_window.geometry("300x300+10+10")
+                    update_window.title("Update")
+
+                    # create entries which are set with receiver, title and body of found message
+                    receiver_update_label = Label(update_window, text="Receiver")
+                    receiver_update_label.grid(row=1, column=1)
+                    if box == 'Inbox':
+                        user.read_message(num_message_update)
+                        receiver_value = StringVar(update_window, value=message_find.sender)
                     else:
-                        update_content = user.write_message(receiver=update_receiver,
-                                                            title=update_title,
-                                                            body=update_body)
-                        update_tabs()
-                        update_window.withdraw()
-                    if update_content == "Message not Found":  # check whether message found or not
-                        messagebox.showerror("Error", update_content)  # show error if message not found
-                        logger.warning("attempt to update none existent message")
-                    elif update_content == "Successfully Update":
-                        messagebox.showinfo("Info", update_content)  # show successfully update
-                        logger.info("message updated")
-                        update_tabs()  # refresh tabs contents
-                        update_window.withdraw()  # hide update window
+                        receiver_value = StringVar(update_window, value=message_find.receiver)
+                    receiver_update_entry = Entry(update_window, text=receiver_value)
+                    receiver_update_entry.grid(row=1, column=2)
 
-                # create update window
-                update_window = Tk()
-                update_window.geometry("300x300+10+10")
-                update_window.title("Update")
+                    title_update_label = Label(update_window, text="Title")
+                    title_update_label.grid(row=2, column=1)
+                    if box == 'Inbox':
+                        value = 'Re: ' + message_find.title
+                    else:
+                        value = message_find.title
+                    title_value = StringVar(update_window, value=value)
+                    title_update_entry = Entry(update_window, text=title_value)
+                    title_update_entry.grid(row=2, column=2)
 
-                # create entries which are set with receiver, title and body of found message
-                receiver_update_label = Label(update_window, text="Receiver")
-                receiver_update_label.grid(row=1, column=1)
-                if box == 'Inbox':
-                    user.read_message(num_message_update)
-                    receiver_value = StringVar(update_window, value=message_find.sender)
-                else:
-                    receiver_value = StringVar(update_window, value=message_find.receiver)
-                receiver_update_entry = Entry(update_window, text=receiver_value)
-                receiver_update_entry.grid(row=1, column=2)
+                    body_update_label = Label(update_window, text="Body")
+                    body_update_label.grid(row=3, column=1)
+                    body_value = StringVar(update_window, value=message_find.body)
+                    body_update_entry = Entry(update_window, text=body_value)
+                    body_update_entry.grid(row=4, column=2)
 
-                title_update_label = Label(update_window, text="Title")
-                title_update_label.grid(row=2, column=1)
-                if box == 'Inbox':
-                    value = 'Re: ' + message_find.title
-                else:
-                    value = message_find.title
-                title_value = StringVar(update_window, value=value)
-                title_update_entry = Entry(update_window, text=title_value)
-                title_update_entry.grid(row=2, column=2)
+                    # create update button
+                    update_window_button = Button(update_window, text="Draft",
+                                                  command=lambda: update_button(box, num_message_update)
+                                                  )
+                    update_window_button.grid(row=6, column=2)
 
-                body_update_label = Label(update_window, text="Body")
-                body_update_label.grid(row=3, column=1)
-                body_value = StringVar(update_window, value=message_find.body)
-                body_update_entry = Entry(update_window, text=body_value)
-                body_update_entry.grid(row=4, column=2)
-
-                # create update button
-                update_window_button = Button(update_window, text="Draft",
-                                              command=lambda: update_button(box, num_message_update)
-                                              )
-                update_window_button.grid(row=6, column=2)
-
-                # create send button to send updated message if user wants
-                send_window_button = Button(update_window,
-                                            text="Send",
-                                            command=lambda: send_message(receiver_update_entry,
-                                                                         title_update_entry,
-                                                                         body_update_entry,
-                                                                         num_message=num_message_update,
-                                                                         window=update_window
-                                                                         )
-                                            )
-                send_window_button.grid(row=6, column=3)
+                    # create send button to send updated message if user wants
+                    send_window_button = Button(update_window,
+                                                text="Send",
+                                                command=lambda: send_message(receiver_update_entry,
+                                                                             title_update_entry,
+                                                                             body_update_entry,
+                                                                             num_message=num_message_update,
+                                                                             window=update_window
+                                                                             )
+                                                )
+                    send_window_button.grid(row=6, column=3)
 
             # handle error if user enters wrong value for number entry
             except ValueError:
