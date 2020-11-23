@@ -3,6 +3,8 @@ from tkinter import messagebox
 from user import User
 from tkinter import ttk
 from PIL import ImageTk, Image
+from logger import logger
+from globals import *
 
 
 def main():
@@ -371,7 +373,7 @@ def main():
     register_button = ttk.Button(register_tab, text='Register', command=register)
     register_button.grid(row=2, column=1)
 
-    ttk.Label(register_tab, text="").grid(row=6, column=1)
+    waiting_label = ttk.Label(register_tab, text="").grid(row=6, column=1)
 
     # Design login tab
     # put username label and entry
