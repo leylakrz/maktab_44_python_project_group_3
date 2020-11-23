@@ -310,9 +310,9 @@ def main():
         if username == "" or username.isspace() or password == "" or password.isspace():
             messagebox.showerror("Error", "Username or Password can not be Empty" + '\n\n' + "or be just White Space")
         else:
-            # User.CREATE = True  # let to create user
+            # let to create user
             user = User(username, password)
-            user.register()
+            user.register()                 # register user
             if user.text == "Register is Complete {}".format(user.username):
                 messagebox.showinfo("Welcome!", user.text)  # welcome to user
             else:
