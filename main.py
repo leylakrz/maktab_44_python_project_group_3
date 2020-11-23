@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from datetime import *
 from tkinter import ttk
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 from user import User
 from logger import logger
@@ -326,7 +326,7 @@ def main():
     # Define function login button
     # input : messenger menu, username, password from their labels
     # output: login user if user found else show error by message box, change login status of the user
-        def login_user(menu_login):
+    def login_user(menu_login):
         if Globals.counter < 3:  # Globals.counter counts unsuccessful log in attempts.
             waiting_label.config(
                 text="")  # this label informs the user to wait 60 seconds before trying to log in after ...
@@ -395,8 +395,6 @@ def main():
     register_button = ttk.Button(register_tab, text='Register', command=register)
     register_button.grid(row=2, column=1)
 
-    waiting_label = ttk.Label(register_tab, text="").grid(row=6, column=1)
-
     # Design login tab
     # put username label and entry
     ttk.Label(login_tab, text='username').grid(row=0)
@@ -411,7 +409,9 @@ def main():
     # put login button
     login_button = Button(login_tab, text='Login', command=lambda: login_user(app))
     login_button.grid(row=2, column=1)
-    ttk.Label(login_tab, text="").grid(row=6, column=1)
+
+    waiting_label = ttk.Label(login_tab, text="")
+    waiting_label.grid(row=6, column=1)
 
     # show messenger menu
     app.mainloop()
