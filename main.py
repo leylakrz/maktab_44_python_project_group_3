@@ -107,6 +107,7 @@ def main():
                     logger.warning("attempt to read none existent message")
 
                 else:
+                    logger.info("message read")
                     # create read window
                     read_window = Tk()
                     read_window.geometry("300x300+10+10")
@@ -358,7 +359,7 @@ def main():
             else:  # if user is found
                 if user.text == "Password is Wrong!":  # check password
                     messagebox.showerror("Error", user.text)
-                logger.warning("attempt to log in with wrong password")
+                    logger.warning("attempt to log in with wrong password")
             if user.login_status:  # check whether login is successful or not
                 Globals.counter = 0
                 logger.info("sign in")
