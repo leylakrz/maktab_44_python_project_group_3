@@ -1,8 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
-from user import User
+from datetime import *
 from tkinter import ttk
 from PIL import ImageTk, Image
+
+from user import User
 from logger import logger
 from globals import *
 
@@ -324,19 +326,39 @@ def main():
     # Define function login button
     # input : messenger menu, username, password from their labels
     # output: login user if user found else show error by message box, change login status of the user
-    def login_user(menu_login):
-        global login
-        username = username_login_entry.get()
-        password = password_login_entry.get()
-        user = User(username, password)  # create user
-        user.login(username, password)    # login
-        if not user.found:                # if user is found
-            messagebox.showerror("Error", user.text)
-        elif not user.login_status:        # if password is wrong
-            messagebox.showerror("Error", user.text)
-        else:  # if login is successful
-            open_menu_tabs(menu_login, user)  # go to account of user
-        login = user.login_status
+        def login_user(menu_login):
+        if Globals.counter < 3:  # Globals.counter counts unsuccessful log in attempts.
+            waiting_label.config(
+                text="")  # this label informs the user to wait 60 seconds before trying to log in after ...
+            # ... 3 consecutive unsuccessful log in attempts.
+            global login
+            username = username_login_entry.get()
+            password = password_login_entry.get()
+            user = User(username, password)  # check user existence
+            user.login(username, password)  # try login
+            if not user.found:
+                messagebox.showerror("Error", "Username is Wrong!")
+                logger.warning("attempt to log in with wrong username")
+            else:  # if user is found
+                if user.text == "Password is Wrong!":  # check password
+                    messagebox.showerror("Error", user.text)
+                logger.warning("attempt to log in with wrong password")
+            if user.login_status:  # check whether login is successful or not
+                Globals.counter = 0
+                open_menu_tabs(menu_login, user)  # go to account of user
+            else:
+                Globals.counter += 1
+                if Globals.counter == 3:
+                    Globals.start_time = datetime.now()
+                    waiting_label.config(text="wait 10 seconds and try again.")
+
+            login = user.login_status
+        else:
+            wait = int(10 - (datetime.now() - Globals.start_time).total_seconds())
+            if wait > 0:
+                waiting_label.config(text="wait {} seconds and try again.".format(wait))
+            else:
+                Globals.counter = 0
 
     # create messenger menu and set its features
     app = Tk()
