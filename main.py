@@ -85,12 +85,15 @@ def main():
                 delete_text = user.delete_message(num_message, box)
                 if delete_text == "Successfully Deleted":  # check whether deleting is successful or not
                     messagebox.showinfo("Delete", delete_text)  # show success
+                    logger.info("message deleted")
                     update_tabs()
                 else:
                     messagebox.showerror("Error", delete_text)  # show error
+                    logger.error("attempt to delete none existent message")
 
             except ValueError:  # if message number is not entered correctly
                 messagebox.showerror("Error", "Please Enter a Number!")  # ask to enter it as a number
+                logger.error("ValueError")
 
         # define function to read inbox messages
         def read():
@@ -101,6 +104,8 @@ def main():
                 message_content = user.read_message(num_message)
                 if message_content == "Message not Found":  # check whether the message exists or not
                     messagebox.showerror("Error", message_content)  # show error if message not found
+                    logger.error("attempt to read none existent message")
+
                 else:
                     # create read window
                     read_window = Tk()
@@ -116,6 +121,7 @@ def main():
             except ValueError:
                 # show error if message not found
                 messagebox.showerror("Error", "Please Enter a Number!")
+                logger.error("ValueError")
 
         # create an entry to get the message number of inbox
         Label(inbox_tab, text="Number: ").grid(row=1, column=1)
@@ -159,8 +165,10 @@ def main():
                         update_window.withdraw()
                     if update_content == "Message not Found":  # check whether message found or not
                         messagebox.showerror("Error", update_content)  # show error if message not found
+                        logger.error("attempt to update none existent message")
                     elif update_content == "Successfully Update":
                         messagebox.showinfo("Info", update_content)  # show successfully update
+                        logger.info("message updated")
                         update_tabs()  # refresh tabs contents
                         update_window.withdraw()  # hide update window
 
@@ -217,6 +225,7 @@ def main():
             # handle error if user enters wrong value for number entry
             except ValueError:
                 messagebox.showerror("Error", "Please Enter a Number!")
+                logger.error("ValueError")
 
         # create number label and entry to get message number
         Label(draft_tab, text="Number: ").grid(row=1, column=1)
@@ -241,6 +250,7 @@ def main():
             receiver = receiver_entry.get()  # get receiver
             if receiver == "":  # check whether receiver is empty or not
                 messagebox.showerror("Error", " Please Enter Receiver ")  # show error if not
+                logger.warning("attempt to send message without assigning a receiver")
             else:
                 title = title_entry.get()  # get title
                 body = body_entry.get()  # get body
@@ -248,6 +258,7 @@ def main():
                 written_message = user.write_message(receiver=receiver, title=title, body=body)
                 if written_message == "Receiver not Found":  # check whether receiver exists or not
                     messagebox.showerror("Error", "Receiver not Found")  # show error if receiver not found
+                    logger.warning("attempt to send message to none existent receiver")
                 else:  # else
                     update_tabs()  # update tabs contents
                 return written_message  # return written message
@@ -264,6 +275,7 @@ def main():
             message_status = user.send_message(receiver, written_message)
             if message_status == 'Unread':  # check status of message
                 messagebox.showinfo("", "Message Sent")  # show message sent
+                logger.info("message sent")
                 update_tabs()  # update tabs contents
                 # if user tries send message in draft box and it's done successfully
                 if num_message is not None and window is not None:
@@ -294,6 +306,7 @@ def main():
         def sign_out():
             sign_out_text = user.sign_out()  # sign out user
             messagebox.showwarning("Sign out", sign_out_text)  # show sign out
+            logger.info("sign out")
             root.destroy()  # destroy account menu
             messenger_menu.deiconify()  # show messenger menu
 
@@ -313,14 +326,17 @@ def main():
         # handle username or password not be empty or white space
         if username == "" or username.isspace() or password == "" or password.isspace():
             messagebox.showerror("Error", "Username or Password can not be Empty" + '\n\n' + "or be just White Space")
+            logger.warning("attempt to register with empty entries")
         else:
             # let to create user
             user = User(username, password)
             user.register()                 # register user
             if user.text == "Register is Complete {}".format(user.username):
                 messagebox.showinfo("Welcome!", user.text)  # welcome to user
+                logger.info("new register")
             else:
                 messagebox.showerror("Error", user.text)  # show there is a user with the username
+                logger.info("attempt to register with existing username")
             return user
 
     # Define function login button
