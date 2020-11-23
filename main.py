@@ -89,7 +89,7 @@ def main():
                     update_tabs()
                 else:
                     messagebox.showerror("Error", delete_text)  # show error
-                    logger.error("attempt to delete none existent message")
+                    logger.warning("attempt to delete none existent message")
 
             except ValueError:  # if message number is not entered correctly
                 messagebox.showerror("Error", "Please Enter a Number!")  # ask to enter it as a number
@@ -104,7 +104,7 @@ def main():
                 message_content = user.read_message(num_message)
                 if message_content == "Message not Found":  # check whether the message exists or not
                     messagebox.showerror("Error", message_content)  # show error if message not found
-                    logger.error("attempt to read none existent message")
+                    logger.warning("attempt to read none existent message")
 
                 else:
                     # create read window
@@ -165,7 +165,7 @@ def main():
                         update_window.withdraw()
                     if update_content == "Message not Found":  # check whether message found or not
                         messagebox.showerror("Error", update_content)  # show error if message not found
-                        logger.error("attempt to update none existent message")
+                        logger.warning("attempt to update none existent message")
                     elif update_content == "Successfully Update":
                         messagebox.showinfo("Info", update_content)  # show successfully update
                         logger.info("message updated")
@@ -336,7 +336,7 @@ def main():
                 logger.info("new register")
             else:
                 messagebox.showerror("Error", user.text)  # show there is a user with the username
-                logger.info("attempt to register with existing username")
+                logger.warning("attempt to register with existing username")
             return user
 
     # Define function login button
@@ -361,6 +361,7 @@ def main():
                 logger.warning("attempt to log in with wrong password")
             if user.login_status:  # check whether login is successful or not
                 Globals.counter = 0
+                logger.info("sign in")
                 open_menu_tabs(menu_login, user)  # go to account of user
             else:
                 Globals.counter += 1
