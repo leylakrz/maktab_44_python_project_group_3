@@ -3,7 +3,6 @@ import binascii
 from message import Message
 import os
 import hashlib
-import codecs
 from datetime import datetime
 from user_json import *
 
@@ -20,6 +19,7 @@ class User:
         SAlT: class attribute, keep a random value for hash function
 
     Methods:
+        register: register a new user
         login:       check username and password and if they are correct, let the user to log in to the mail box
         sign_out:    let the user to exit from the mail box
         send_message: let the user to send a message to another user
@@ -42,6 +42,7 @@ class User:
         self.login_status = False
         self.text = ''
 
+    # register: register a new user
     def register(self):
         register_data = read_json()
         for item in register_data['data']:
@@ -49,7 +50,6 @@ class User:
                 self.text = "{} already is in use!".format(self.username) + '\n\n' + "Change Your Username"
                 self.found = True
                 break
-        # if not self.found and User.CREATE:
         if not self.found:
             user_info = {
                 "User": self.username,
@@ -63,7 +63,6 @@ class User:
             # add_user_info('user.json', user_info)
             self.text = "Register is Complete {}".format(self.username)
         return self.text
-        # User.CREATE = False
 
     # login: check username and password and if they are correct, let the user to log in to the mail box
     def login(self, username_input, password_input):
@@ -71,17 +70,22 @@ class User:
         # check username and password
         login_data = read_json()
         for item in login_data['data']:
-            if item['User'] == username_input and item["Password"] == hashlib.pbkdf2_hmac('sha256',
-                                                                                          password_input.encode(),
-                                                                                          item['Salt'].encode(),
-                                                                                          100000
-                                                                                          ).decode(errors="ignore"):
-                self.login_status = True
+            if item['User'] == username_input:
+                # if user is found
                 self.found = True
-                # ** *Welcome! {} ** * ".format(self.username)
-                self.text = "Welcome! {}".format(self.username)
-                break
-        if not self.login_status:
+                # check password
+                if self.found and item["Password"] == hashlib.pbkdf2_hmac('sha256',
+                                                                          password_input.encode(),
+                                                                          item['Salt'].encode(),
+                                                                          100000
+                                                                          ).decode(errors="ignore"):
+                    self.login_status = True
+
+                    self.text = "Welcome! {}".format(self.username)
+                    break
+        if not self.found:
+            self.text = "Username is Wrong!"
+        elif not self.login_status:
             self.text = "Password is Wrong!"
         return self.login_status
 

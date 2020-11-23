@@ -326,17 +326,13 @@ def main():
         global login
         username = username_login_entry.get()
         password = password_login_entry.get()
-        user = User(username, password)  # check user existence
-        user.login(username, password)
-        if not user.found:
-            messagebox.showerror("Error", "Username is Wrong!")
-        else:  # if user is found
-            # user.login(username, password)  # try login
-            # print(user.username)
-            # print(user.hash_password)
-            if user.text == "Password is Wrong!":  # check password
-                messagebox.showerror("Error", user.text)
-        if user.login_status:  # check whether login is successful or not
+        user = User(username, password)  # create user
+        user.login(username, password)    # login
+        if not user.found:                # if user is found
+            messagebox.showerror("Error", user.text)
+        elif not user.login_status:        # if password is wrong
+            messagebox.showerror("Error", user.text)
+        else:  # if login is successful
             open_menu_tabs(menu_login, user)  # go to account of user
         login = user.login_status
 
